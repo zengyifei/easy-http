@@ -29,6 +29,7 @@ It looks much better, isn't it?
 Usage
 ===
 ## Get
+The type of `requests.Params` is `map[string]interface{}`
 ```Golang
 // send request to http://localhost:5000/?a=1&b=2
 resp, err := requests.Get("http://localhost:5000/",requests.Params{
