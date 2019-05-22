@@ -26,13 +26,8 @@ func (resp *response) Bytes() []byte { return resp.data }
 
 func (resp *response) Unmarshal(v interface{}) error { return json.Unmarshal(resp.data, v) }
 
-func Get(url string, params map[string]interface{}) (*response, error) {
-	var (
-		ps  = neturl.Values{}
-		r   = &response{}
-		err error
-	)
-
+func genURL(url string, params map[string]interface{}) string {
+	var ps = neturl.Values{}
 	for k, v := range params {
 		ps.Add(k, fmt.Sprint(v))
 	}
@@ -40,8 +35,17 @@ func Get(url string, params map[string]interface{}) (*response, error) {
 	if len(params) != 0 {
 		url = fmt.Sprintf("%s?%s", url, ps.Encode())
 	}
+	return url
+}
 
-	if r.Response, err = http.Get(url); err != nil {
+func Get(url string, params map[string]interface{}) (*response, error) {
+	var (
+		r    = &response{}
+		_url = genURL(url, params)
+		err  error
+	)
+
+	if r.Response, err = http.Get(_url); err != nil {
 		return nil, err
 	}
 	defer r.Response.Body.Close()
@@ -55,18 +59,10 @@ func Get(url string, params map[string]interface{}) (*response, error) {
 
 func Post(url string, params map[string]interface{}, f *form) (*response, error) {
 	var (
-		ps  = neturl.Values{}
-		r   = &response{}
-		err error
+		r    = &response{}
+		_url = genURL(url, params)
+		err  error
 	)
-
-	for k, v := range params {
-		ps.Add(k, fmt.Sprint(v))
-	}
-
-	if len(params) != 0 {
-		url = fmt.Sprintf("%s?%s", url, ps.Encode())
-	}
 
 	//创建一个模拟的form中的一个选项,这个form项现在是空的
 	bodyBuf := &bytes.Buffer{}
@@ -94,12 +90,12 @@ func Post(url string, params map[string]interface{}, f *form) (*response, error)
 			}
 		}
 	}
-
 	contentType := bodyWriter.FormDataContentType()
+
 	bodyWriter.Close()
 
 	//发送post请求到服务端
-	if r.Response, err = http.Post(url, contentType, bodyBuf); err != nil {
+	if r.Response, err = http.Post(_url, contentType, bodyBuf); err != nil {
 		return nil, err
 	}
 	defer r.Response.Body.Close()
@@ -135,4 +131,25 @@ func (f *form) AddFile(name, filename string, data []byte) *form {
 
 func NewForm() *form {
 	return &form{map[string][]interface{}{}}
+}
+
+func PostBinary(url string, params map[string]interface{}, body io.Reader) (*response, error) {
+	var (
+		r    = &response{}
+		_url = genURL(url, params)
+		err  error
+	)
+
+	//发送post请求到服务端
+	if r.Response, err = http.Post(_url, "multipart/form-data", body); err != nil {
+		return nil, err
+	}
+	defer r.Response.Body.Close()
+
+	if r.data, err = ioutil.ReadAll(r.Response.Body); err != nil {
+		return nil, err
+	}
+
+	return r, nil
+
 }
