@@ -1,14 +1,14 @@
 package requests
 
 import (
-	"testing"
+	"bytes"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"fmt"
 	"net/url"
 	"reflect"
-	"io/ioutil"
-	"bytes"
+	"testing"
 )
 
 type testFile struct {
@@ -18,28 +18,28 @@ type testFile struct {
 
 var (
 	params = Params{
-		"name": "John",
-		"age": 18,
+		"name":   "John",
+		"age":    18,
 		"height": float64(55.6),
 	}
 
 	postParams = map[string][]interface{}{
-		"width": {"20",40},
-		"height": {30,float64(43),float32(12)},
+		"width":  {"20", 40},
+		"height": {30, float64(43), float32(12)},
 	}
 
 	filecontent = "this is a test file."
-	filedata = []byte(filecontent)
+	filedata    = []byte(filecontent)
 
-	testFiles = map[string][]testFile {
-		"firstFile": { {name: "firstFile.txt", data: filedata}, },
-		"secondFile": { {name: "secondFile.txt", data: filedata}, },
-		"thirdFile": { {name: "thirdFile.txt", data: filedata}, },
+	testFiles = map[string][]testFile{
+		"firstFile":  {{name: "firstFile.txt", data: filedata}},
+		"secondFile": {{name: "secondFile.txt", data: filedata}},
+		"thirdFile":  {{name: "thirdFile.txt", data: filedata}},
 	}
-
 )
 
 func TestURLParams(t *testing.T) {
+
 	GETHandler := func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
 		for key, value := range params {
@@ -49,10 +49,14 @@ func TestURLParams(t *testing.T) {
 		}
 	}
 	ts := httptest.NewServer(http.HandlerFunc(GETHandler))
+
+	// test get url params
 	_, err := Get(ts.URL, params)
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	// test post url params
 	_, err = Post(ts.URL, params, nil)
 	if err != nil {
 		t.Fatal(err)
@@ -63,12 +67,12 @@ func TestPostNilForm(t *testing.T) {
 	PostHandler := func(w http.ResponseWriter, r *http.Request) {}
 	ts := httptest.NewServer(http.HandlerFunc(PostHandler))
 
+	// post nil form
 	_, err := Post(ts.URL, params, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
-
 
 func TestPostWithoutFile(t *testing.T) {
 	form := NewForm()
@@ -91,13 +95,14 @@ func TestPostWithoutFile(t *testing.T) {
 			t.Fatal(err)
 		}
 		got := r.PostForm
-		if !reflect.DeepEqual(want, got){
+		if !reflect.DeepEqual(want, got) {
 			t.Errorf("want: %v, got: %v", want, got)
 		}
 
 	}
 	ts := httptest.NewServer(http.HandlerFunc(PostHandler))
 
+	// post only fields, no file
 	_, err := Post(ts.URL, params, form)
 	if err != nil {
 		t.Fatal(err)
@@ -118,7 +123,6 @@ func TestPostWithMultiFiles(t *testing.T) {
 		}
 	}
 
-
 	PostHandler := func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseMultipartForm(1024 * 5); err != nil {
 			t.Fatal(err)
@@ -130,7 +134,7 @@ func TestPostWithMultiFiles(t *testing.T) {
 			got := r.MultipartForm.Value
 			for name, values := range postParams {
 				for _, v := range values {
-					want[name] = append(want[name],fmt.Sprint(v))
+					want[name] = append(want[name], fmt.Sprint(v))
 				}
 			}
 
@@ -155,7 +159,7 @@ func TestPostWithMultiFiles(t *testing.T) {
 						t.Fatal(err)
 					}
 
-					got[fieldname] = append(got[fieldname],testFile{
+					got[fieldname] = append(got[fieldname], testFile{
 						name: file.Filename,
 						data: data,
 					})
@@ -167,11 +171,10 @@ func TestPostWithMultiFiles(t *testing.T) {
 			}
 		}
 
-
-
 	}
 	ts := httptest.NewServer(http.HandlerFunc(PostHandler))
 
+	// post fields and multi files
 	_, err := Post(ts.URL, params, form)
 	if err != nil {
 		t.Fatal(err)
@@ -193,6 +196,7 @@ func TestPostBinary(t *testing.T) {
 	}
 	ts := httptest.NewServer(http.HandlerFunc(PostHandler))
 
+	// post binary data
 	_, err := PostBinary(ts.URL, params, bytes.NewReader(filedata))
 	if err != nil {
 		t.Fatal(err)
