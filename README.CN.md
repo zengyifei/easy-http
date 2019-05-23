@@ -28,7 +28,7 @@ if err != nil {
 log.Println(resp.String())      　　　　　　　 // get response string
 log.Println(resp.Bytes())       　　　　　　　 // get response bytes
 log.Println(resp.Reader())      　　　　　　　 // get response reader
-log.Println(resp.Unmarshal(&YourStruct))　 // Unmarshal data into YourStruct
+log.Println(resp.Unmarshal(&YourStruct))　   // Unmarshal data into YourStruct
 ```
 
 ## POST:
@@ -43,7 +43,7 @@ params := requests.Params{
     "b": 2,
 }
 
-// 向表单添加了两个字段，和两个文件
+// 向表单添加了两个字段和两个文件
 formdata := requests.NewForm().AddField("field1", "value1").
                                AddField("field2", "value2").
                                AddFile("fileField1", "test.txt", data).
@@ -58,5 +58,5 @@ if err != nil {
 log.Println(resp.String())      　　　　　　　 // get response string
 log.Println(resp.Bytes())       　　　　　　　 // get response bytes
 log.Println(resp.Reader())      　　　　　　　 // get response reader
-log.Println(resp.Unmarshal(&YourStruct))　 // Unmarshal data into YourStruct
+log.Println(resp.Unmarshal(&YourStruct))　   // Unmarshal data into YourStruct
 ```
