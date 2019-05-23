@@ -52,6 +52,9 @@ formdata := requests.NewForm().AddField("field1", "value1").
 // 向 http://localhost:5000?a=1&b=2 发送表单数据
 resp, err := requests.Post(url, params, formdata)
 
+// 传递一个 io.Reader 参数发送二进制数据
+resp, err = requests.PostBinary(url, params, bytes.NewReader(data))
+
 if err != nil {
 	log.Fatal(err)
 }
