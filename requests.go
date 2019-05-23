@@ -20,7 +20,9 @@ type Params map[string]interface{}
 
 func (resp *response) String() string { return string(resp.data) }
 
-func (resp *response) Reader() *bytes.Reader { return bytes.NewReader(resp.data) }
+func (resp *response) Reader() io.Reader {
+	return interface{}(bytes.NewReader(resp.data)).(io.Reader)
+}
 
 func (resp *response) Bytes() []byte { return resp.data }
 
