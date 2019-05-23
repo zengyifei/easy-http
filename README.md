@@ -52,6 +52,9 @@ formdata := requests.NewForm().AddField("field1", "value1").
 // post form data to http://localhost:5000?a=1&b=2
 resp, err := requests.Post(url, params, formdata)
 
+// pass an io.Reader param to post binary data
+resp, err = requests.PostBinary(url, params, bytes.NewReader(data))
+
 if err != nil {
 	log.Fatal(err)
 }
