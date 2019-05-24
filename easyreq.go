@@ -1,4 +1,4 @@
-package requests
+package easyreq
 
 import (
 	"bytes"
@@ -130,7 +130,7 @@ func NewForm() *form {
 	}
 }
 
-// send post requests with file(s)
+// send post easyreq with file(s)
 func postWithFile(url string, params map[string]interface{}, f *form) (*response, error) {
 	var (
 		r    = &response{}
@@ -168,7 +168,7 @@ func postWithFile(url string, params map[string]interface{}, f *form) (*response
 	contentType := bodyWriter.FormDataContentType()
 	bodyWriter.Close()
 
-	// send post requests with data
+	// send post easyreq with data
 	if r.Response, err = http.Post(_url, contentType, bodyBuf); err != nil {
 		return nil, err
 	}
@@ -181,7 +181,7 @@ func postWithFile(url string, params map[string]interface{}, f *form) (*response
 	return r, nil
 }
 
-// send post requests with only fields, no files
+// send post easyreq with only fields, no files
 func postWithoutFile(url string, params map[string]interface{}, f *form) (*response, error) {
 	var (
 		r    = &response{}

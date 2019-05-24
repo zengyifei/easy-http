@@ -1,4 +1,4 @@
-package requests
+package easyreq
 
 import (
 	"bytes"
@@ -10,6 +10,8 @@ import (
 	"net/url"
 	"reflect"
 	"testing"
+	"github.com/zengyifei/requests"
+	"log"
 )
 
 type testFile struct {
@@ -293,4 +295,39 @@ func TestResponse(t *testing.T) {
 		}
 	})
 
+}
+
+type YourStruct struct {}
+
+func ExampleGet(){
+	// send request to http://localhost:5000/?a=1&b=2
+	resp, err := requests.Get("http://localhost:5000/",requests.Params{
+		"a": 1,
+		"b": "2",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(resp.String())            				// get response string
+	log.Println(resp.Bytes())             				// get response bytes
+	log.Println(resp.Reader())            				// get response reader
+	log.Println(resp.Unmarshal(&YourStruct{}))   		// Unmarshal data into YourStruct, the same as json.Unmarshal
+}
+
+func ExamplePost(){
+
+}
+
+func ExamplePostBinary() {
+
+	data := []byte("your binary data")
+	// post data to http://localhost:5000/
+	resp, err := requests.PostBinary("http://localhost:5000/",nil, bytes.NewReader(data))
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(resp.String())            				// get response string
+	log.Println(resp.Bytes())             				// get response bytes
+	log.Println(resp.Reader())            				// get response reader
+	log.Println(resp.Unmarshal(&YourStruct{}))   		// Unmarshal data into YourStruct, the same as json.Unmarshal
 }
