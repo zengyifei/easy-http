@@ -1,4 +1,6 @@
-# requests
+# requests 
+[![GoDoc](https://godoc.org/github.com/zengyifei/requests?status.svg)](https://godoc.org/github.com/zengyifei/requests)
+
 This Project aims at providing an easiest way to send get and post requests for Gophers.
 
 Document
