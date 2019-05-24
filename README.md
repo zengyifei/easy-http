@@ -28,7 +28,7 @@ if err != nil {
 log.Println(resp.String())      　　　　　　　 // get response string
 log.Println(resp.Bytes())       　　　　　　　 // get response bytes
 log.Println(resp.Reader())      　　　　　　　 // get response reader
-log.Println(resp.Unmarshal(&YourStruct))　 // Unmarshal data into YourStruct
+log.Println(resp.Unmarshal(&YourStruct))　   // Unmarshal data into YourStruct
 ```
 
 ## POST:
@@ -61,5 +61,5 @@ if err != nil {
 log.Println(resp.String())      　　　　　　　 // get response string
 log.Println(resp.Bytes())       　　　　　　　 // get response bytes
 log.Println(resp.Reader())      　　　　　　　 // get response reader
-log.Println(resp.Unmarshal(&YourStruct))　 // Unmarshal data into YourStruct
+log.Println(resp.Unmarshal(&YourStruct))　   // Unmarshal data into YourStruct
 ```
