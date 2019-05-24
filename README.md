@@ -11,7 +11,7 @@ Why easyreq?
 ===
 1. Imagine now that you want to send a simple Get request, output a response string, can't ignore the error, how many lines of code do you need? Then send a post request? Post request with upload files?It should be quite a lot.
 2. I don't want to write such a long, ugly and hard-to-remember code every time. I believe other people are like this. So I want to write a simple, easy to use, easy to remember lib.
-3. I saw someone on github who had the same idea as me. He wrote [goreq](https://github.com/franela/goreq), but unfortunately, in my opinion, it is still a bit complicated. It still allows the user to define some of the options for the request, sometimes it means not easy to remember. So this is not allowed in my mind.And his lib usage doesn't seem to be as simple as mine.
+3. I saw someone on github who had the same idea as me. He wrote [goreq](https://github.com/franela/goreq), but unfortunately, in my opinion, it is still a bit complicated. It still allows the user to define some of the options for the request, sometimes it means not easy to remember. So this is not allowed in my mind.And the usage of his lib doesn't seem to be as simple as mine.
 
 Install
 ===
