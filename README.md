@@ -60,7 +60,7 @@ formdata := easyreq.NewForm().AddField("field1", "value1").
 // post form data to http://localhost:5000?a=1&b=2
 resp, err := easyreq.Post(url, params, formdata)
 
-// pass an io.Reader param to post binary data
+// post binary data by passing an io.Reader param 
 resp, err = easyreq.PostBinary(url, params, bytes.NewReader(data))
 
 if err != nil {
