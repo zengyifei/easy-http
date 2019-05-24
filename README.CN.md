@@ -1,4 +1,6 @@
 # requests
+[![GoDoc](https://godoc.org/github.com/zengyifei/requests?status.svg)](https://godoc.org/github.com/zengyifei/requests)
+
 这个项目主要是为Gophers提供一种最简单的方式去发送get和post请求。
 
 文档
