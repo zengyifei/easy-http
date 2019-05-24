@@ -1,5 +1,5 @@
-# requests 
-[![GoDoc](https://godoc.org/github.com/zengyifei/requests?status.svg)](https://godoc.org/github.com/zengyifei/requests)
+# easyreq
+[![GoDoc](https://godoc.org/github.com/zengyifei/easyreq?status.svg)](https://godoc.org/github.com/zengyifei/easyreq)
 
 This Project aims at providing an easiest way to send get and post requests for Gophers.
 
@@ -20,7 +20,7 @@ Usage
 ```Golang
 // The type of requests.Params is map[string]interface{}
 // send request to http://localhost:5000/?a=1&b=2
-resp, err := requests.Get("http://localhost:5000/",requests.Params{
+resp, err := easyreq.Get("http://localhost:5000/",requests.Params{
     "a": 1,
     "b": "2",
 })
@@ -39,22 +39,22 @@ log.Println(resp.Unmarshal(&YourStruct))　   // Unmarshal data into YourStruct
 data, _ := ioutil.ReadFile("filepath")
 
 url := "http://localhost:5000"
-params := requests.Params{
+params := easyreq.Params{
     "a": 1,
     "b": 2,
 }
 
 // add two fields and two files to the form 
-formdata := requests.NewForm().AddField("field1", "value1").
+formdata := easyreq.NewForm().AddField("field1", "value1").
                                AddField("field2", "value2").
                                AddFile("fileField1", "test.txt", data).
                                AddFile("fileField2", "test.txt", data)
 
 // post form data to http://localhost:5000?a=1&b=2
-resp, err := requests.Post(url, params, formdata)
+resp, err := easyreq.Post(url, params, formdata)
 
 // pass an io.Reader param to post binary data
-resp, err = requests.PostBinary(url, params, bytes.NewReader(data))
+resp, err = easyreq.PostBinary(url, params, bytes.NewReader(data))
 
 if err != nil {
 	log.Fatal(err)
