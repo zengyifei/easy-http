@@ -46,8 +46,11 @@ func genURL(url string, params map[string]interface{}) string {
 }
 
 // Get issues a GET to the specified URL.
+//
 // It pass two params: url and params.
+//
 // url can be a host or a complete url
+//
 // params holds string-interface{} pairs, they will be attached behind the url
 func Get(url string, params map[string]interface{}) (*response, error) {
 	var (
