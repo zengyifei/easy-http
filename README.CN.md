@@ -10,7 +10,7 @@
 安装
 ===
 ``` sh
-go get github.com/zengyifei/requests
+go get github.com/zengyifei/easyreq
 ```
 
 用法

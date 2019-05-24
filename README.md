@@ -10,7 +10,7 @@ Document
 Install
 ===
 ``` sh
-go get github.com/zengyifei/requests
+go get github.com/zengyifei/easyreq
 ```
 
 Usage
