@@ -20,16 +20,16 @@ type response struct {
 	data []byte
 }
 
-// return response string data
+// Response string data
 func (resp *response) String() string { return string(resp.data) }
 
-// return an io.Reader which save the response bytes data
+// An io.Reader which save the response bytes data
 func (resp *response) Reader() io.Reader { return interface{}(bytes.NewReader(resp.data)).(io.Reader) }
 
-// return response bytes data
+// Response bytes data
 func (resp *response) Bytes() []byte { return resp.data }
 
-// unmarshal response data into v
+// Unmarshal response data into v
 func (resp *response) Unmarshal(v interface{}) error { return json.Unmarshal(resp.data, v) }
 
 // attach params behind url
@@ -45,7 +45,10 @@ func genURL(url string, params map[string]interface{}) string {
 	return url
 }
 
-// Send a Get Request
+// Get issues a GET to the specified URL.
+// It pass two params: url and params.
+// url can be a host or a complete url
+// params holds string-interface{} pairs, they will be attached behind the url
 func Get(url string, params map[string]interface{}) (*response, error) {
 	var (
 		r    = &response{}
@@ -65,7 +68,11 @@ func Get(url string, params map[string]interface{}) (*response, error) {
 	return r, nil
 }
 
-// Send a Post Request with form
+// Post issues a POST to the specified URL.
+// It pass three params: url, params and f
+// url can be a host or a complete url
+// params holds string-interface{} pairs, they will be attached behind the url
+// f is a form which holds some fields or some files data, and will be sended to the url
 func Post(url string, params map[string]interface{}, f *form) (resp *response, err error) {
 	if f == nil {
 		resp, err = postNilForm(url, params)
@@ -86,7 +93,7 @@ type postfile struct {
 	data []byte
 }
 
-// web form
+// simulate web form
 type form struct {
 	fields  map[string][]interface{}
 	hasFile bool
@@ -98,7 +105,11 @@ func (f *form) AddField(name string, value interface{}) *form {
 	return f
 }
 
-// add one file into form
+// Add one file into web form.
+// It pass three params: name, filename and data
+// name is the field you want to post
+// filename, emmm, is just a file name
+// data is the file data
 func (f *form) AddFile(name, filename string, data []byte) *form {
 	f.hasFile = true
 	f.fields[name] = append(f.fields[name], postfile{
@@ -108,7 +119,7 @@ func (f *form) AddFile(name, filename string, data []byte) *form {
 	return f
 }
 
-// generate a new form
+// Generate a new Web form
 func NewForm() *form {
 	return &form{
 		make(map[string][]interface{}),
