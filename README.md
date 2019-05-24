@@ -34,8 +34,7 @@ log.Println(resp.Unmarshal(&YourStruct))　   // Unmarshal data into YourStruct
 ## POST:
 ```Golang
 // get file data
-fp, _ := filepath.Abs("example/test.txt")
-data, _ := ioutil.ReadFile(fp)
+data, _ := ioutil.ReadFile("filepath")
 
 url := "http://localhost:5000"
 params := requests.Params{
