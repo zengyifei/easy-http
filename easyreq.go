@@ -15,22 +15,22 @@ import (
 type Params map[string]interface{}
 
 // Response
-type response struct {
+type Response struct {
 	*http.Response
 	data []byte
 }
 
 // Response string data
-func (resp *response) String() string { return string(resp.data) }
+func (resp *Response) String() string { return string(resp.data) }
 
-// An io.Reader which save the response bytes data
-func (resp *response) Reader() io.Reader { return interface{}(bytes.NewReader(resp.data)).(io.Reader) }
+// An io.Reader which save the Response bytes data
+func (resp *Response) Reader() io.Reader { return interface{}(bytes.NewReader(resp.data)).(io.Reader) }
 
 // Response bytes data
-func (resp *response) Bytes() []byte { return resp.data }
+func (resp *Response) Bytes() []byte { return resp.data }
 
-// Unmarshal response data into v
-func (resp *response) Unmarshal(v interface{}) error { return json.Unmarshal(resp.data, v) }
+// Unmarshal Response data into v
+func (resp *Response) Unmarshal(v interface{}) error { return json.Unmarshal(resp.data, v) }
 
 // attach params behind url
 func genURL(url string, params map[string]interface{}) string {
@@ -50,9 +50,9 @@ func genURL(url string, params map[string]interface{}) string {
 // url can be a host or a complete url
 //
 // params holds string-interface{} pairs, which will be attached behind the url
-func Get(url string, params map[string]interface{}) (*response, error) {
+func Get(url string, params map[string]interface{}) (*Response, error) {
 	var (
-		r    = &response{}
+		r    = &Response{}
 		_url = genURL(url, params)
 		err  error
 	)
@@ -76,7 +76,7 @@ func Get(url string, params map[string]interface{}) (*response, error) {
 // params holds string-interface{} pairs, which will be attached behind the url
 //
 // f is a form which holds some fields or some files data, and will be sended to the url
-func Post(url string, params map[string]interface{}, f *form) (resp *response, err error) {
+func Post(url string, params map[string]interface{}, f *form) (resp *Response, err error) {
 	if f == nil {
 		resp, err = postNilForm(url, params)
 		return
@@ -131,9 +131,9 @@ func NewForm() *form {
 }
 
 // send post easyreq with file(s)
-func postWithFile(url string, params map[string]interface{}, f *form) (*response, error) {
+func postWithFile(url string, params map[string]interface{}, f *form) (*Response, error) {
 	var (
-		r    = &response{}
+		r    = &Response{}
 		_url = genURL(url, params)
 		err  error
 	)
@@ -182,9 +182,9 @@ func postWithFile(url string, params map[string]interface{}, f *form) (*response
 }
 
 // send post easyreq with only fields, no files
-func postWithoutFile(url string, params map[string]interface{}, f *form) (*response, error) {
+func postWithoutFile(url string, params map[string]interface{}, f *form) (*Response, error) {
 	var (
-		r    = &response{}
+		r    = &Response{}
 		_url = genURL(url, params)
 		err  error
 		data = neturl.Values{}
@@ -215,9 +215,9 @@ func postWithoutFile(url string, params map[string]interface{}, f *form) (*respo
 }
 
 // send post request with nothing
-func postNilForm(url string, params map[string]interface{}) (*response, error) {
+func postNilForm(url string, params map[string]interface{}) (*Response, error) {
 	var (
-		r    = &response{}
+		r    = &Response{}
 		_url = genURL(url, params)
 		err  error
 	)
@@ -235,9 +235,9 @@ func postNilForm(url string, params map[string]interface{}) (*response, error) {
 }
 
 // PostBinary issues a POST to the specified URL with binary data.
-func PostBinary(url string, params map[string]interface{}, body io.Reader) (*response, error) {
+func PostBinary(url string, params map[string]interface{}, body io.Reader) (*Response, error) {
 	var (
-		r    = &response{}
+		r    = &Response{}
 		_url = genURL(url, params)
 		err  error
 	)

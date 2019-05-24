@@ -4,14 +4,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/zengyifei/easyreq"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"reflect"
+	"strings"
 	"testing"
-	"github.com/zengyifei/requests"
-	"log"
 )
 
 type testFile struct {
@@ -19,7 +20,7 @@ type testFile struct {
 	data []byte
 }
 
-type Response struct {
+type testResponse struct {
 	Result string `json:"result"`
 }
 
@@ -48,7 +49,7 @@ var (
 		"thirdFile":  {{name: "thirdFile.txt", data: filedata}},
 	}
 
-	testResponse = Response{
+	tr = testResponse{
 		Result: "success",
 	}
 )
@@ -220,7 +221,7 @@ func TestPostBinary(t *testing.T) {
 
 func TestResponse(t *testing.T) {
 	GETHandler := func(w http.ResponseWriter, r *http.Request) {
-		respdata, err := json.Marshal(Response{
+		respdata, err := json.Marshal(testResponse{
 			Result: "success",
 		})
 		if err != nil {
@@ -238,7 +239,7 @@ func TestResponse(t *testing.T) {
 	// test response Bytes() method
 	t.Run("TestResponse_Bytes", func(t *testing.T) {
 		got := resp.Bytes()
-		want, err := json.Marshal(testResponse)
+		want, err := json.Marshal(tr)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -251,7 +252,7 @@ func TestResponse(t *testing.T) {
 	// test response String() method
 	t.Run("TestResponse_String", func(t *testing.T) {
 		got := resp.String()
-		testdata, err := json.Marshal(testResponse)
+		testdata, err := json.Marshal(tr)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -272,7 +273,7 @@ func TestResponse(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		want, err := json.Marshal(testResponse)
+		want, err := json.Marshal(tr)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -284,8 +285,8 @@ func TestResponse(t *testing.T) {
 
 	// test response Unmarshal() method
 	t.Run("TestResponse_Unmarshal", func(t *testing.T) {
-		want := testResponse
-		got := Response{}
+		want := tr
+		got := testResponse{}
 		if err := resp.Unmarshal(&got); err != nil {
 			t.Fatal(err)
 		}
@@ -297,37 +298,55 @@ func TestResponse(t *testing.T) {
 
 }
 
-type YourStruct struct {}
+type YourStruct struct{}
 
-func ExampleGet(){
+func ExampleGet() {
 	// send request to http://localhost:5000/?a=1&b=2
-	resp, err := requests.Get("http://localhost:5000/",requests.Params{
+	resp, err := easyreq.Get("http://localhost:5000/", easyreq.Params{
 		"a": 1,
 		"b": "2",
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(resp.String())            				// get response string
-	log.Println(resp.Bytes())             				// get response bytes
-	log.Println(resp.Reader())            				// get response reader
-	log.Println(resp.Unmarshal(&YourStruct{}))   		// Unmarshal data into YourStruct, the same as json.Unmarshal
+	log.Println(resp.String())                 // get response string
+	log.Println(resp.Bytes())                  // get response bytes
+	log.Println(resp.Reader())                 // get response reader
+	log.Println(resp.Unmarshal(&YourStruct{})) // Unmarshal data into YourStruct, the same as json.Unmarshal
 }
 
-func ExamplePost(){
+func ExamplePost() {
+	// post multi fields and files
+	form := easyreq.NewForm().
+		AddField("field1", "value1").
+		AddField("field2", "value2").
+		AddFile("field3", "filename1", []byte("file data1")).
+		AddFile("field4", "filename2", []byte("file data2"))
 
-}
-
-func ExamplePostBinary() {
-
-	data := []byte("your binary data")
-	// post data to http://localhost:5000/
-	resp, err := requests.PostBinary("http://localhost:5000/",nil, bytes.NewReader(data))
+	// send request to http://localhost:5000/?a=1&b=2
+	resp, err := easyreq.Post("http://localhost:5000/?a=1&b=2", nil, form)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(resp.String())            				// get response string
-	log.Println(resp.Bytes())             				// get response bytes
-	log.Println(resp.Reader())            				// get response reader
-	log.Println(resp.Unmarshal(&YourStruct{}))   		// Unmarshal data into YourStruct, the same as json.Unmarshal
+
+	log.Println(resp.String())                 // get response string
+	log.Println(resp.Bytes())                  // get response bytes
+	log.Println(resp.Reader())                 // get response reader
+	log.Println(resp.Unmarshal(&YourStruct{})) // Unmarshal data into YourStruct, the same as json.Unmarshal
+}
+
+func ExamplePostBinary() {
+	// rd should implement io.Reader
+	rd := strings.NewReader("your data")
+
+	// post data to http://localhost:5000/
+	resp, err := easyreq.PostBinary("http://localhost:5000/", nil, rd)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println(resp.String())                 // get response string
+	log.Println(resp.Bytes())                  // get response bytes
+	log.Println(resp.Reader())                 // get response reader
+	log.Println(resp.Unmarshal(&YourStruct{})) // Unmarshal data into YourStruct, the same as json.Unmarshal
 }
