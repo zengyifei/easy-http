@@ -46,9 +46,9 @@ params := easyreq.Params{
 
 // 向表单添加了两个字段和两个文件
 formdata := easyreq.NewForm().AddField("field1", "value1").
-                               AddField("field2", "value2").
-                               AddFile("fileField1", "test.txt", data).
-                               AddFile("fileField2", "test.txt", data)
+                              AddField("field2", "value2").
+                              AddFile("fileField1", "test1.txt", data).
+                              AddFile("fileField2", "test2.txt", data)
 
 // 向 http://localhost:5000?a=1&b=2 发送表单数据
 resp, err := easyreq.Post(url, params, formdata)
