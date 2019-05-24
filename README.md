@@ -18,9 +18,9 @@ Usage
 ## GET:
 
 ```Golang
-// The type of requests.Params is map[string]interface{}
+// The type of easyreq.Params is map[string]interface{}
 // send request to http://localhost:5000/?a=1&b=2
-resp, err := easyreq.Get("http://localhost:5000/",requests.Params{
+resp, err := easyreq.Get("http://localhost:5000/",easyreq.Params{
     "a": 1,
     "b": "2",
 })
