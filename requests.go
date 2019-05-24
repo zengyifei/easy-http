@@ -49,7 +49,7 @@ func genURL(url string, params map[string]interface{}) string {
 //
 // url can be a host or a complete url
 //
-// params holds string-interface{} pairs, they will be attached behind the url
+// params holds string-interface{} pairs, which will be attached behind the url
 func Get(url string, params map[string]interface{}) (*response, error) {
 	var (
 		r    = &response{}
@@ -73,7 +73,7 @@ func Get(url string, params map[string]interface{}) (*response, error) {
 //
 // url can be a host or a complete url
 //
-// params holds string-interface{} pairs, they will be attached behind the url
+// params holds string-interface{} pairs, which will be attached behind the url
 //
 // f is a form which holds some fields or some files data, and will be sended to the url
 func Post(url string, params map[string]interface{}, f *form) (resp *response, err error) {
