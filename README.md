@@ -9,23 +9,9 @@ Document
 
 Why easyreq?
 ===
-Golang net/http lib gives us the flexibility to customize requests to handle the various situations that occur.But it takes me several lines when I just want to send an easiest GET request. Like this:
-``` Golang
-resp, err := http.Get("http://localhost:5000")
-if err != nil {
-    fmt.Println(err)
-}
-defer resp.Body.Close()
-data, err := ioutil.ReadAll(resp.Body)
-if err != nil {
-    fmt.Println(err)
-}
-fmt.Println("Response string：", string(data))
-```
-Then what about a POST request with multiple fields and files? More lines. And maybe you also need to baidu or Google to get the usage about how to post files.  
-That's the reason why I write easyreq which aims at providing an easiest way to help gophers to send get and post requests.  
-It should be easy to use and easy to remember and maybe will not add too much funcitons in the future in order not to complicate it. 
-
+1. Imagine now that you want to send a simple Get request, output a response string, can't ignore the error, how many lines of code do you need? Then send a post request? Post request with upload files?It should be quite a lot.
+2. I don't want to write such a long, ugly and hard-to-remember code every time. I believe other people are like this. So I want to write a simple, easy to use, easy to remember lib.
+3. I saw someone on github who had the same idea as me. He wrote [goreq](https://github.com/franela/goreq), but unfortunately, in my opinion, it is still a bit complicated. It still allows the user to define some of the options for the request, sometimes it means not easy to remember. So this is not allowed in my mind.And his lib usage doesn't seem to be as simple as mine.
 
 Install
 ===
