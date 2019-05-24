@@ -47,8 +47,8 @@ params := easyreq.Params{
 // add two fields and two files to the form 
 formdata := easyreq.NewForm().AddField("field1", "value1").
                               AddField("field2", "value2").
-                              AddFile("fileField1", "test.txt", data).
-                              AddFile("fileField2", "test.txt", data)
+                              AddFile("fileField1", "test1.txt", data).
+                              AddFile("fileField2", "test2.txt", data)
 
 // post form data to http://localhost:5000?a=1&b=2
 resp, err := easyreq.Post(url, params, formdata)
