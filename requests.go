@@ -47,8 +47,6 @@ func genURL(url string, params map[string]interface{}) string {
 
 // Get issues a GET to the specified URL.
 //
-// It pass two params: url and params.
-//
 // url can be a host or a complete url
 //
 // params holds string-interface{} pairs, they will be attached behind the url
@@ -72,9 +70,11 @@ func Get(url string, params map[string]interface{}) (*response, error) {
 }
 
 // Post issues a POST to the specified URL.
-// It pass three params: url, params and f
+//
 // url can be a host or a complete url
+//
 // params holds string-interface{} pairs, they will be attached behind the url
+//
 // f is a form which holds some fields or some files data, and will be sended to the url
 func Post(url string, params map[string]interface{}, f *form) (resp *response, err error) {
 	if f == nil {
@@ -234,7 +234,7 @@ func postNilForm(url string, params map[string]interface{}) (*response, error) {
 	return r, nil
 }
 
-// send post request with binary data
+// PostBinary issues a POST to the specified URL with binary data.
 func PostBinary(url string, params map[string]interface{}, body io.Reader) (*response, error) {
 	var (
 		r    = &response{}
