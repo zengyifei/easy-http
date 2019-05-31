@@ -1,7 +1,7 @@
 # easyreq
 [![GoDoc](https://godoc.org/github.com/zengyifei/easyreq?status.svg)](https://godoc.org/github.com/zengyifei/easyreq)
 
-This Project aims at providing an easiest way to send get and post requests for Gophers.
+This Project aims at providing an easiest way to send GET and POST requests for Gophers.
 
 Document
 ===
